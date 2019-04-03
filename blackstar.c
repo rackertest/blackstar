@@ -31,7 +31,7 @@ int count = 0;
 
 /* perform_work function args struct */
 typedef struct {
-    char arg_1[300];
+    char arg_1[500];
 } arg_struct;
 
 int usage(){
@@ -51,7 +51,6 @@ int usage(){
 /* function to execute in every thread */
 void *perform_work(void *argument){
    arg_struct *actual_args = argument;
-   //printf("%s\n", actual_args->arg_1);
    system(actual_args->arg_1);
    ++count;
 
