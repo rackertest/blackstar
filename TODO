@@ -1,0 +1,1 @@
+At the time of this writing, this program compiles fine with no optimization. If optimization is used it will work with the -f option, but single host options will segfault. There are also some options with the configure and Makefile options I wish to address to make this cleaner. Lastly, the man page should be installed without the user having to copy the man file.
