@@ -1,3 +1,5 @@
+This program only has two dependencies: sshpass and ccrypt.
+
 Install instructions are as follows:
 
 	./configure
