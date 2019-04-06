@@ -134,9 +134,6 @@ int file_open(char *name, char *comm){
 
 int main (int argc, char **argv) {
   int opt, fflag, lflag, uflag, wflag, pflag, eflag, oflag, dflag = 0;
-  char *passst = "sshpass -p '";
-  char *passcl = "' ";
-  char *skip = "-o StrictHostKeyChecking=no ";
   char *user = NULL;
   char *host = NULL;
   char *pass = NULL;  
@@ -203,7 +200,7 @@ while(optind < argc) {
 }
 
    if(dflag == 1){
-	ccrypt=(char *)malloc(strlen(dcrypt) + 10);   
+	ccrypt=(char *)malloc(strlen(dcrypt) + 1);   
 	strcpy(ccrypt, "ccrypt -d ");
 	strcat(ccrypt, dcrypt);
 	system(ccrypt);
@@ -213,15 +210,15 @@ while(optind < argc) {
 	file_open(input, exec);
    }
    else if(fflag == 0 && lflag == 1 && uflag == 1 && eflag == 1){
-	sshpass=(char *)malloc(sizeof((lflag + uflag + eflag)*2));
+	sshpass=(char *)malloc((sizeof(host) + sizeof(user) + sizeof(exec) + sizeof(port) + sizeof(pass))*4);
 	if(wflag == 1){
-		strcpy(sshpass, passst);
+		strcpy(sshpass, "sshpass -p '");
 		strcat(sshpass, pass);
-		strcat(sshpass, passcl);
+		strcat(sshpass, "' ");
 	}
 	strcat(sshpass, "ssh ");
 	if(oflag == 1){
-		strcat(sshpass, skip);
+		strcat(sshpass, "-o StrictHostKeyChecking=no ");
 	}
 	strcat(sshpass, "-T ");
 	strcat(sshpass, user);
@@ -234,7 +231,8 @@ while(optind < argc) {
 		strcat(sshpass, " -p ");
 		strcat(sshpass, port);
 	}
-	system(sshpass);
+	//system(sshpass);
+	printf("%s\n", sshpass);
    }
    else{
 	usage();
