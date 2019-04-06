@@ -3,6 +3,7 @@ DevOps Software In C
 
 Install instructions are as follows:
 
+	chmod +x configure
 	./configure
 	make
 	make install
