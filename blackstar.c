@@ -31,7 +31,7 @@ int count = 0;
 
 /* perform_work function args struct */
 typedef struct {
-    char arg_1[500];
+    char *arg_1;
 } arg_struct;
 
 int usage(){
@@ -109,10 +109,10 @@ int file_open(char *name, char *comm){
 
     /* create all threads one by one */
     arg_struct *args = malloc(sizeof(arg_struct)*i);
-    for (index = 0; index < i; ++index) {
+    for (index = 0; index < i; ++index) { 
+        args[index].arg_1 = malloc((sizeof(words) + sizeof(comm))*i);    
         strcpy(args[index].arg_1, words[index]);
 	strcat(args[index].arg_1, comm);
-        arg_struct arg_1[strlen(comm) + 1];
         result_code = pthread_create(&threads[index], NULL, perform_work, &args[index]);
         assert(0 == result_code);
     }
@@ -137,12 +137,18 @@ int main (int argc, char **argv) {
   char *passst = "sshpass -p '";
   char *passcl = "' ";
   char *skip = "-o StrictHostKeyChecking=no ";
-  char *exec, *user, *host, *pass, *sshpass, *port, *input, *dcrypt, *ccrypt; 
-  input = NULL;
-  exec = NULL;
+  char *user = NULL;
+  char *host = NULL;
+  char *pass = NULL;  
+  char *sshpass = NULL;
+  char *port = NULL; 
+  char *dcrypt = NULL;
+  char *ccrypt = NULL; 
+  char *input = NULL;
+  char *exec = NULL;
 
 while(optind < argc) {
-  if(( opt = getopt(argc, argv, "f:l:u:p:w:e:d:sho")) != -1){
+  if(( opt = getopt(argc, argv, "f:l:u:p:w:e:d:ho")) != -1){
    switch(opt){
      case 'f':
        fflag = 1;
