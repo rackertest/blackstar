@@ -231,8 +231,7 @@ while(optind < argc) {
 		strcat(sshpass, " -p ");
 		strcat(sshpass, port);
 	}
-	//system(sshpass);
-	printf("%s\n", sshpass);
+	system(sshpass);
    }
    else{
 	usage();
