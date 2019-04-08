@@ -51,7 +51,7 @@ If a password is set in the SSHPASS environment variable and it is exported, the
 
 Keep in mind that the SSHPASS variable may only hold one password. So you can use other variables for different passwords that are specified like this:
 
-        sshpass -p $CHEESE ssh -T user@localhost
+	sshpass -p $CHEESE ssh -T user@localhost
 	
 The literal password can be used in place of the variable in the commands above. Though for security it is better to just use variables, encrypted password files or ssh keys. If ssh keys are used for logins, lines with only the following can be used a file of hosts:
 
