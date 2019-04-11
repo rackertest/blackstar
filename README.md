@@ -1,5 +1,5 @@
 # blackstar
-DevOps Software In C
+DevOps Software In C - This was written to execute devops tasks with more speed and flexibility. This code will allow for pushing out scripts or binaries written in any langauge to be executed on multiple servers. With the performance of C and threaded execution it should compete with the best of any devops tools. Allowing for code execution in any langauge should free up developers from having to learn a new langauge or being tied to only one tool for the job.
 
 Install instructions are as follows:
 
