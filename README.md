@@ -75,9 +75,9 @@ Escaping will rarely be needed, but certain situation may require escaping or us
 
 To issue commands with sudo, lines like the following to prevent being prompted for a password:
  
-	echo $SSHPASS | sshpass -e ssh -T ph33r@localhost
+	echo $SSHPASS | sshpass -e ssh -T user@localhost
 
-Then you can use 'sudo -S command' with the -e option and you will not be prompted for the password in $SSHPASS.
+Then you can use 'sudo -S command' with the -e option and you will not be prompted for the password already in $SSHPASS.
 
 SEE ALSO
 sshpass(8), ccrypt(5), blackstar.debian(8) 
