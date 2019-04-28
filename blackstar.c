@@ -34,6 +34,18 @@ typedef struct {
     char *arg_1;
 } arg_struct;
 
+union options {
+  char *user;
+  char *host;
+  char *pass;  
+  char *sshpass;
+  char *port; 
+  char *dcrypt;
+  char *ccrypt; 
+  char *input;
+  char *exec;
+};
+
 int usage(){
 	printf("\nUsage: ./blackstar [flags] [arguments]\n"
             "-f  Path to file of hosts.\n"
@@ -134,54 +146,65 @@ int file_open(char *name, char *comm){
 
 int main (int argc, char **argv) {
   int opt, fflag, lflag, uflag, wflag, pflag, eflag, oflag, dflag = 0;
-  char *user = NULL;
-  char *host = NULL;
-  char *pass = NULL;  
-  char *sshpass = NULL;
-  char *port = NULL; 
-  char *dcrypt = NULL;
-  char *ccrypt = NULL; 
-  char *input = NULL;
-  char *exec = NULL;
+
+  union options opt1, *ptr1 = &opt1;
+  union options opt2, *ptr2 = &opt2;
+  union options opt3, *ptr3 = &opt3;
+  union options opt4, *ptr4 = &opt4;
+  union options opt5, *ptr5 = &opt5;
+  union options opt6, *ptr6 = &opt6;
+  union options opt7, *ptr7 = &opt7;
+  union options opt8, *ptr8 = &opt8;
+  union options opt9, *ptr9 = &opt9;
+
+  opt1.input = NULL;
+  opt2.host = NULL;
+  opt3.user = NULL;
+  opt4.port = NULL;
+  opt5.pass = NULL;
+  opt6.dcrypt = NULL;
+  opt7.exec = NULL;
+  opt8.sshpass = NULL;
+  opt9.ccrypt = NULL;
 
 while(optind < argc) {
   if(( opt = getopt(argc, argv, "f:l:u:p:w:e:d:ho")) != -1){
    switch(opt){
      case 'f':
        fflag = 1;
-       input=(char *)malloc(strlen(optarg));
-       strcpy(input, optarg);
+       ptr1->input=(char *)malloc(strlen(optarg));
+       strcpy(ptr1->input, optarg);
        break;
      case 'l':
        lflag = 1;
-       host=(char *)malloc(strlen(optarg));
-       strcpy(host, optarg);
+       ptr2->host=(char *)malloc(strlen(optarg));
+       strcpy(ptr2->host, optarg);
        break;
      case 'u':
        uflag = 1;
-       user=(char *)malloc(strlen(optarg));
-       strcpy(user, optarg);
+       ptr3->user=(char *)malloc(strlen(optarg));
+       strcpy(ptr3->user, optarg);
        break;
      case 'p':
        pflag = 1;
-       port=(char *)malloc(strlen(optarg));
-       strcpy(port, optarg);
+       ptr4->port=(char *)malloc(strlen(optarg));
+       strcpy(ptr4->port, optarg);
        break;
      case 'w':
        wflag = 1;
-       pass=(char *)malloc(strlen(optarg));
-       strcpy(pass, optarg);
+       ptr5->pass=(char *)malloc(strlen(optarg));
+       strcpy(ptr5->pass, optarg);
        break;
      case 'd':
        dflag = 1;
-       dcrypt=(char *)malloc(strlen(optarg));
-       strcpy(dcrypt, optarg);
+       ptr6->dcrypt=(char *)malloc(strlen(optarg));
+       strcpy(ptr6->dcrypt, optarg);
        break;
      case 'e':
        eflag = 1;
-       exec=(char *)malloc(strlen(optarg));
-       strcpy(exec, " ");
-       strcat(exec, optarg);
+       ptr7->exec=(char *)malloc(strlen(optarg));
+       strcpy(ptr7->exec, " ");
+       strcat(ptr7->exec, optarg);
        break;
      case 'o':
        oflag = 1;
@@ -200,38 +223,38 @@ while(optind < argc) {
 }
 
    if(dflag == 1){
-	ccrypt=(char *)malloc(strlen(dcrypt) + 1);   
-	strcpy(ccrypt, "ccrypt -d ");
-	strcat(ccrypt, dcrypt);
-	system(ccrypt);
+	ptr9->ccrypt=(char *)malloc(strlen(ptr6->dcrypt) + 1);   
+	strcpy(ptr9->ccrypt, "ccrypt -d ");
+	strcat(ptr9->ccrypt, ptr6->dcrypt);
+	system(ptr9->ccrypt);
    }
 
    if (fflag == 1 && eflag == 1){ 
-	file_open(input, exec);
+	file_open(ptr1->input, ptr7->exec);
    }
    else if(fflag == 0 && lflag == 1 && uflag == 1 && eflag == 1){
-	sshpass=(char *)malloc((sizeof(host) + sizeof(user) + sizeof(exec) + sizeof(port) + sizeof(pass))*4);
+	ptr8->sshpass=(char *)malloc((sizeof(ptr2->host) + sizeof(ptr3->user) + sizeof(ptr7->exec) + sizeof(ptr4->port) + sizeof(ptr5->pass))*4);
 	if(wflag == 1){
-		strcpy(sshpass, "sshpass -p '");
-		strcat(sshpass, pass);
-		strcat(sshpass, "' ");
+		strcpy(ptr8->sshpass, "sshpass -p '");
+		strcat(ptr8->sshpass, ptr5->pass);
+		strcat(ptr8->sshpass, "' ");
 	}
-	strcat(sshpass, "ssh ");
+	strcat(ptr8->sshpass, "ssh ");
 	if(oflag == 1){
-		strcat(sshpass, "-o StrictHostKeyChecking=no ");
+		strcat(ptr8->sshpass, "-o StrictHostKeyChecking=no ");
 	}
-	strcat(sshpass, "-T ");
-	strcat(sshpass, user);
-	strcat(sshpass, "@");
-	strcat(sshpass, host);
-	strcat(sshpass, " '");
-	strcat(sshpass, exec);
-	strcat(sshpass, "'");
+	strcat(ptr8->sshpass, "-T ");
+	strcat(ptr8->sshpass, ptr3->user);
+	strcat(ptr8->sshpass, "@");
+	strcat(ptr8->sshpass, ptr2->host);
+	strcat(ptr8->sshpass, " '");
+	strcat(ptr8->sshpass, ptr7->exec);
+	strcat(ptr8->sshpass, "'");
 	if(pflag == 1){
-		strcat(sshpass, " -p ");
-		strcat(sshpass, port);
+		strcat(ptr8->sshpass, " -p ");
+		strcat(ptr8->sshpass, ptr4->port);
 	}
-	system(sshpass);
+	system(ptr8->sshpass);
    }
    else{
 	usage();
@@ -239,20 +262,21 @@ while(optind < argc) {
 
    if(dflag == 1){ 
 	printf("*File was decrypted for usage. Now re-encrypt it.*\n");
-	dcrypt[strlen(dcrypt)-4] = 0;
-	strcpy(ccrypt, "ccrypt ");
-        strcat(ccrypt, dcrypt);	
-	system(ccrypt);	
+	ptr6->dcrypt[strlen(ptr6->dcrypt)-4] = 0;
+	strcpy(ptr9->ccrypt, "ccrypt ");
+        strcat(ptr9->ccrypt, ptr6->dcrypt);	
+	system(ptr8->sshpass);	
    }
 
-   if(!sshpass){free(sshpass);} 
-   if(!host){free(host);} 
-   if(!user){free(user);} 
-   if(!exec){free(exec);} 
-   if(!pass){free(pass);} 
-   if(!port){free(port);} 
-   if(!ccrypt){free(ccrypt);} 
-   if(!dcrypt){free(dcrypt);}  
+   if(!ptr1->input){free(ptr1->input);}
+   if(!ptr8->sshpass){free(ptr8->sshpass);} 
+   if(!ptr2->host){free(ptr2->host);} 
+   if(!ptr3->user){free(ptr3->user);} 
+   if(!ptr7->exec){free(ptr7->exec);} 
+   if(!ptr5->pass){free(ptr5->pass);} 
+   if(!ptr4->port){free(ptr4->port);} 
+   if(!ptr9->ccrypt){free(ptr9->ccrypt);} 
+   if(!ptr6->dcrypt){free(ptr6->dcrypt);}  
 
   return 0;
 }
