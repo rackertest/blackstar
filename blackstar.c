@@ -145,7 +145,8 @@ int file_open(char *name, char *comm){
 }
 
 int main (int argc, char **argv) {
-  int opt, fflag, lflag, uflag, wflag, pflag, eflag, oflag, dflag = 0;
+  unsigned short int fflag, lflag, uflag, wflag, pflag, eflag, oflag, dflag = 0;
+  short int opt = 0;
 
   union options opt1, *ptr1 = &opt1;
   union options opt2, *ptr2 = &opt2;
